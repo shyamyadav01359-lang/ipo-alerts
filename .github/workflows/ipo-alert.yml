@@ -1,4 +1,4 @@
-name: IPO Listing Alert
+name: IPO Listing Alert (auto-fetch)
 
 on:
   schedule:
@@ -8,7 +8,6 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,10 +20,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas yfinance requests
+          pip install pandas yfinance requests beautifulsoup4 lxml
 
-      - name: Run IPO alert script
+      - name: Run auto-fetch IPO script
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python ipo_alerts.py
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}         # optional
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }} # optional
+          MIN_GAIN: '8'
+          MAX_GAIN: '30'
+        run: python ipo_alerts_auto.py

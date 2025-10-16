@@ -1,0 +1,22 @@
+name: IPO Listing Alert
+
+on:
+  schedule:
+    - cron: '0 8 * * 1-5'   # 08:00 UTC = 13:30 IST Mon-Fri
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with: python-version: "3.11"
+      - name: Install deps
+        run: pip install pandas yfinance requests
+      - name: Run script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python ipo_alerts.py

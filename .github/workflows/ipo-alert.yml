@@ -3,7 +3,7 @@ name: IPO Listing Alert
 on:
   schedule:
     - cron: '0 8 * * 1-5'   # 08:00 UTC = 13:30 IST Mon-Fri
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   run:
@@ -16,10 +16,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install pandas yfinance requests
 
       - name: Run IPO alert script
